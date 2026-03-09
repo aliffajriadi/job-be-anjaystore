@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Config {
+  id         Int    @id @default(1)
+  depo_world String
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  username  String   @unique
+  password  String
+  balance   Int      @default(0) // Saldo Rupiah
+  wl        Int      @default(0) // Saldo World Lock
+  growid    String?  @unique // GrowID untuk transaksi Growtopia
+  avatar    String?
+  role      String   @default("USER") // USER | ADMIN
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders        Order[]
+  topups        Topup[]
+  notifications Notification[]
+  messages      Message[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  image       String?
+  category    String   @default("Umum")
+  stock       Int      @default(0) // Aggregated stock count
+  priceIdr    Int?
+  priceDl     Int?
+  priceMode   String   @default("IDR_ONLY") // IDR_ONLY | DL_ONLY | BOTH
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  stockItems StockItem[]
+  orders     Order[]
+}
+
+model StockItem {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  content   String // Isi produk (misal: "user:pass" atau "license-key")
+  status    String   @default("AVAILABLE") // AVAILABLE | SOLD
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  order   Order?  @relation(fields: [orderId], references: [id])
+  orderId Int?
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  productId  Int
+  quantity   Int
+  totalPrice Int
+  currency   String   @default("IDR") // IDR | DL
+  status     String   @default("PENDING") // PENDING | PAID | COMPLETED | CANCELLED
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user       User        @relation(fields: [userId], references: [id])
+  product    Product     @relation(fields: [productId], references: [id])
+  stockItems StockItem[] // Items delivered with this order
+}
+
+model Topup {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  amount    Int
+  currency  String   @default("IDR") // IDR | DL
+  method    String // Qris, Bank, Growtopia_World
+  status    String   @default("PENDING") // PENDING | SUCCESS | FAILED | CANCELLED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  type      String   @default("INFO") // INFO | SUCCESS | WARNING | DANGER
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  sender    String   @default("ADMIN") // ADMIN | USER
+  content   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
