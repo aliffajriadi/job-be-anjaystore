@@ -15,7 +15,6 @@ const server = createServer(app);
 const PORT = process.env.PORT || 5000;
 
 // --- INITIALIZE SOCKET ---
-initSocket(server);
 
 // --- CONFIGURASI CORS ---
 app.use(
@@ -26,6 +25,9 @@ app.use(
     credentials: true,
   }),
 );
+
+initSocket(server);
+
 
 app.use(express.json());
 
