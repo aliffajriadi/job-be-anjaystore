@@ -20,7 +20,7 @@ initSocket(server);
 // --- CONFIGURASI CORS ---
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://192.168.1.8:3000"],
+    origin: ["http://localhost:3000", "http://192.168.1.8:3000", "https://anjay.fun"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Admin-Key"],
     credentials: true,
