@@ -1,6 +1,7 @@
 import topupRepository from "./topup.repository.js";
 import { getIo } from "../../common/config/socket.js";
 import notificationRepository from "../notification/notification.repository.js";
+import sendDiscordNotification from "../../common/webhook/discord.js";
 
 class TopupService {
   async addBalanceViaGrowtopia(growid, totalWL, key) {
@@ -29,6 +30,11 @@ class TopupService {
     console.log(
       `💰 [Topup] Balance updated for ${user.username}: ${updatedUser.wl} WL (+${totalWL} WL | +${totalDLFixed} DL)`,
     );
+
+    await sendDiscordNotification({
+      name: user.username,
+      totalDL: totalDLFixed,
+    });
 
     // 4. Emit ke WebSocket untuk real-time update di FE
     const io = getIo();
