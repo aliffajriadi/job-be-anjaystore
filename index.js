@@ -9,6 +9,7 @@ import productRoutes from "./src/modules/product/product.routes.js";
 import configRoutes from "./src/modules/config/config.routes.js";
 import topupRoutes from "./src/modules/topup/topup.route.js";
 import notificationRoutes from "./src/modules/notification/notification.routes.js";
+import growtopiaRoutes from "./src/modules/growtopia/growtopia.routes.js";
 
 const app = express();
 const server = createServer(app);
@@ -37,6 +38,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/config", configRoutes);
 app.use("/api/topup", topupRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/growtopia", growtopiaRoutes);
 
 // --- RUN SERVER ---
 server.listen(PORT, "0.0.0.0", () => {
