@@ -10,6 +10,7 @@ import configRoutes from "./src/modules/config/config.routes.js";
 import topupRoutes from "./src/modules/topup/topup.route.js";
 import notificationRoutes from "./src/modules/notification/notification.routes.js";
 import growtopiaRoutes from "./src/modules/growtopia/growtopia.routes.js";
+import dicsordwebhookRoutes from "./src/modules/dicsordwebhook/dicsordwebhook.routes.js";
 
 const app = express();
 const server = createServer(app);
@@ -39,6 +40,7 @@ app.use("/api/config", configRoutes);
 app.use("/api/topup", topupRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/growtopia", growtopiaRoutes);
+app.use("/api/discordwebhook", dicsordwebhookRoutes);
 
 // --- RUN SERVER ---
 server.listen(PORT, "0.0.0.0", () => {
