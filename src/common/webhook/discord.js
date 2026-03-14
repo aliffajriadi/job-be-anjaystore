@@ -37,7 +37,7 @@ const sendDiscordNotification = async (data) => {
             }
           ],
           footer: {
-            text: "<a:12562351879610695981:1461627126070378497> Anjay Store Logging System • anjay.fun",
+            text: "Anjay Store Logging System • https://anjay.fun",
             icon_url: "https://ik.imagekit.io/8zzj11dsp/porto/Screenshot%20from%202026-03-15%2000-09-17.png"
           },
           timestamp: new Date()
