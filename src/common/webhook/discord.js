@@ -8,7 +8,7 @@ const sendDiscordNotification = async (data) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         embeds: [{
-          title: "🟢 TOP UP BERHASIL",
+          title: "<a:check:1438378765335138386> TOP UP BERHASIL",
           url: "https://anjay.fun",
           color: 0x10b981,
           description: "Pesanan telah diproses secara otomatis oleh sistem [anjay.fun](https://anjay.fun)",
@@ -31,14 +31,14 @@ const sendDiscordNotification = async (data) => {
               inline: true
             },
             {
-              name: "🛠️ Status Deposit",
-              value: "Growtopia 👌 ONLINE",
+              name: "<a:NA_Updates:879246105471230023> Status Deposit",
+              value: "Growtopia <a:1412201391413268577:1461627964537045044> ONLINE",
               inline: false
             }
           ],
           footer: {
-            text: "Anjay Store Logging System • anjay.fun",
-            icon_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Anjay"
+            text: "<a:12562351879610695981:1461627126070378497> Anjay Store Logging System • anjay.fun",
+            icon_url: "https://ik.imagekit.io/8zzj11dsp/porto/Screenshot%20from%202026-03-15%2000-09-17.png"
           },
           timestamp: new Date()
         }]
