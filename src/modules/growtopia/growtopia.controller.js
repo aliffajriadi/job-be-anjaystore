@@ -3,7 +3,7 @@ import growtopiaService from './growtopia.service.js';
 class GrowtopiaController {
   async getAll(req, res) {
     const { world, discordID, apikey } = req.query;
-    if (apikey !== process.env.ADMIN_KEY) {
+    if (apikey !== "growscankenanjay") {
       return res.status(401).json({ message: 'Unauthorized' });
     }
     if (!world || !discordID) {
