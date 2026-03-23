@@ -30,8 +30,8 @@ class OrderRepository {
           data: { balance: { decrement: totalPrice } },
         });
       } else if (currency === "DL") {
-        // Convert DL to WL (1 DL = 100 WL)
-        const totalWl = totalPrice * 100;
+        // totalPrice for DL is assumed to be in WL units (e.g., 100 for 1 DL)
+        const totalWl = totalPrice;
         if (user.wl < totalWl) {
           throw new Error("Saldo Diamond Lock tidak mencukupi");
         }

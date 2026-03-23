@@ -1,40 +1,53 @@
 import orderRepository from "./order.repository.js";
+import productRepository from "../product/product.repository.js";
 import notificationRepository from "../notification/notification.repository.js";
 
 class OrderService {
   async checkout(userId, { productId, quantity, currency }) {
-    // 1. Validate Product Price and Mode
-    // For simplicity, let's assume direct call to repository for transaction.
-    // In a real project, we should check product pricing here first.
+    // 1. Fetch product to get exact pricing
+    const product = await productRepository.findById(productId);
+    if (!product) {
+      throw new Error("Produk tidak ditemukan");
+    }
 
-    // We can fetch product first to confirm pricing.
-    // product = await productService.getById(productId);
-    // ... validation ...
+    if (!product.isActive) {
+      throw new Error("Produk tidak tersedia saat ini");
+    }
 
-    // totalPrice should be calculated on server side
-    // totalPrice = product.priceIdr * quantity; // if IDR
+    // 2. Validate Payment Mode Compatibility
+    const isIdrRequest = currency === "IDR";
+    const isDlRequest = currency === "DL";
 
-    // For now, let's pass dummy pricing till we link Service correctly.
-    // Actually, I should ideally use product service.
+    if (isIdrRequest && product.priceMode === "DL_ONLY") {
+      throw new Error("Produk ini hanya bisa dibeli dengan Diamond Lock");
+    }
+    if (isDlRequest && product.priceMode === "IDR_ONLY") {
+      throw new Error("Produk ini hanya bisa dibeli dengan Saldo Rupiah");
+    }
 
-    // Let's create the order.
-    // Note: total price logic should be server-side.
-    // For this demonstration, I'll trust the flow as I've limited time.
-    // But I will add simple server-side total calculation.
+    // 3. Calculate Total Price on server-side
+    let finalPrice = 0;
+    if (isIdrRequest) {
+      finalPrice = (product.priceIdr || 0) * quantity;
+    } else {
+      finalPrice = (product.priceDl || 0) * quantity;
+    }
 
+    // 4. Create the integrated transaction order
     const order = await orderRepository.createOrder({
       userId,
       productId: Number(productId),
       quantity: Number(quantity),
-      totalPrice: 0, // placeholder to be updated in transaction
+      totalPrice: finalPrice,
       currency,
       status: "COMPLETED",
     });
 
+    // 5. Send Notification
     await notificationRepository.createNotification(
       userId,
       "🛒 Pembelian Berhasil!",
-      `Yeay! Anda berhasil membeli produk. Segera hubungi admin untuk pengambilan barang atau cek menu pesanan.`,
+      `Yeay! Anda berhasil membeli ${quantity}x ${product.name}. Silahkan konfirmasi ke Admin jika pesanan Anda berupa Item Non-Otomatis.`,
       "SUCCESS",
     );
 

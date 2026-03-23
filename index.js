@@ -8,6 +8,7 @@ import authRoutes from "./src/modules/auth/auth.routes.js";
 import productRoutes from "./src/modules/product/product.routes.js";
 import configRoutes from "./src/modules/config/config.routes.js";
 import topupRoutes from "./src/modules/topup/topup.route.js";
+import orderRoutes from "./src/modules/order/order.routes.js";
 import notificationRoutes from "./src/modules/notification/notification.routes.js";
 import growtopiaRoutes from "./src/modules/growtopia/growtopia.routes.js";
 import dicsordwebhookRoutes from "./src/modules/dicsordwebhook/dicsordwebhook.routes.js";
@@ -21,7 +22,12 @@ const PORT = process.env.PORT || 5000;
 // --- CONFIGURASI CORS ---
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://192.168.1.8:3000", "https://anjay.fun", "https://www.anjay.fun"],
+    origin: [
+      "http://localhost:3000",
+      "http://192.168.1.8:3000",
+      "https://anjay.fun",
+      "https://www.anjay.fun",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Admin-Key"],
     credentials: true,
@@ -30,12 +36,12 @@ app.use(
 
 initSocket(server);
 
-
 app.use(express.json());
 
 // --- ROUTES ---
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
 app.use("/api/config", configRoutes);
 app.use("/api/topup", topupRoutes);
 app.use("/api/notifications", notificationRoutes);
