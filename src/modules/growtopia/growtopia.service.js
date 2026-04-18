@@ -19,7 +19,7 @@ class GrowtopiaService {
 
       const apikey = process.env.ADMIN_KEY;
       const response = await axios.get(
-        `https://also-mustang-agriculture-eau.trycloudflare.com/scan?world=${world}&apikey=${apikey}`,
+        `https://ward-differently-brian-establishing.trycloudflare.com/scan?world=${world}&apikey=${apikey}`,
         { responseType: "text" },
       );
 
